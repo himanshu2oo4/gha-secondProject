@@ -24,11 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build website
-        run: npm run build
+        run: npm run build --if-present    # run this command only if that build is there 
 #--------------- creating an artifact , giving a name and storing it at a particular location 
 
       - name: uploading artifacts 
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with: 
           name: dist-files 
           path: |
@@ -37,7 +37,7 @@ jobs:
 
 # ---------------------------------------------- 
 
-  
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
