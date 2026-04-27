@@ -18,6 +18,8 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs: 
+      script-files: ${{ steps.publish.outputs.script-files }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -25,13 +27,23 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build --if-present    # run this command only if that build is there 
+
+
+  # ------------- setting up an output variable 
+  
+      - name: Publish js fileName 
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo "script-files= {}" >> $GITHUB_OUTPUT ";" 
+
+
+
 #--------------- creating an artifact , giving a name and storing it at a particular location 
 
       - name: uploading artifacts 
         uses: actions/upload-artifact@v4
         with: 
           name: dist-files 
-          path: |
+          path: |    # should add which files or folders you want to add in a artifact zip file 
             dist
             package.json 
 

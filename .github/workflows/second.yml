@@ -16,7 +16,24 @@ jobs:
     deploy: 
         runs-on: ubuntu-latest 
         needs: build 
-
+        outputs: 
+            output2: ${{steps.step2.outputs.result2}} 
         steps: 
             - name: use output 
               run: echo "value of output var is , ${{needs.build.outputs.my_output}}"
+
+            - name: create 2nd variable 
+              id : step2
+              run: echo "result2=bye-bye-himanshu" >> $GITHUB_OUTPUT
+            
+
+    printer: 
+        runs-on: ubuntu-latest
+        needs: [build , deploy ] 
+        steps: 
+            - name: printing output var values 
+              run: |
+                echo "the value of var 1 : ${{needs.build.outputs.my_output}}"
+                echo "the value of var 2: ${{needs.deploy.outputs.output2}}"
+                
+
